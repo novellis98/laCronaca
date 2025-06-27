@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:insert="~{index :: head}"></head>
+  <body>
+    <head th:insert="~{index :: navbar}"></head>
+    <!-- messaggi -->
+    <div th:if="${param.notAuthorized}">Not authorized</div>
+    <main>
+      <div class="mx-auto px-4">
+        <h1 class="text-3xl font-bold text-center mt-10">
+          Benvenuto su La Cronaca
+        </h1>
+        <p class="text-center mt-4">
+          Il tuo portale per le ultime notizie e articoli.
+        </p>
+      </div>
+    </main>
+
+    <head th:insert="~{index :: footer}"></head>
+  </body>
+</html>

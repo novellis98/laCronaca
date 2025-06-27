@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <head th:fragment="head">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <title th:text="${title}">Title</title>
+  </head>
+  <body>
+    <!-- inicio navbar -->
+    <nav th:fragment="navbar" class="bg-custom-primary text-custom-base">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- LOGO -->
+          <div class="flex items-center">
+            <a
+              th:href="@{/}"
+              class="text-xl font-bold text-custom-base hover:text-white"
+              >La Cronaca</a
+            >
+          </div>
+
+          <!-- HAMBURGER MOBILE -->
+          <div class="flex md:hidden">
+            <button
+              type="button"
+              class="mobile-menu-button text-custom-base cursor-pointer hover:text-white focus:outline-none"
+            >
+              <i class="bi bi-list text-3xl" id="icon-menu"></i>
+            </button>
+          </div>
+
+          <!-- MENU -->
+          <div class="hidden md:flex md:items-center space-x-4">
+            <a th:href="@{/}" class="link-custom">Home</a>
+            <a th:href="@{/prodotti}" class="link-custom">Crea articolo</a>
+            <a th:href="@{/carrello}" class="link-custom">Carrello</a>
+            <a th:href="@{/profilo}" class="link-custom">Profilo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE MENU -->
+      <div class="hidden mobile-menu md:hidden px-4 pb-4">
+        <a th:href="@{/}" class="link-custom-mobile">Home</a>
+        <a th:href="@{/prodotti}" class="link-custom-mobile">Prodotti</a>
+        <a th:href="@{/carrello}" class="link-custom-mobile">Carrello</a>
+        <a th:href="@{/profilo}" class="link-custom-mobile">Profilo</a>
+      </div>
+    </nav>
+    <!-- fine navbar -->
+
+    <!-- inizio footer -->
+    <footer
+      th:fragment="footer"
+      class="footer footer-horizontal footer-center bg-custom-primary text-custom-base p-10"
+    >
+      <aside>
+        <p class="font-bold">La Cronaca</p>
+        <p>Copyright © 2025 - Tutti i diritti riservati</p>
+      </aside>
+      <nav>
+        <div class="grid grid-flow-col gap-4">
+          <a class="cursor-pointer hover:scale-105">
+            <i class="bi bi-browser-chrome"></i>
+          </a>
+          <a class="cursor-pointer hover:scale-105">
+            <i class="bi bi-github"></i>
+          </a>
+          <a class="cursor-pointer hover:scale-105">
+            <i class="bi bi-linkedin"></i>
+          </a>
+        </div>
+      </nav>
+    </footer>
+    <!-- fine footer -->
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const btn = document.querySelector(".mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+        const icon = document.getElementById("icon-menu");
+
+        btn.addEventListener("click", () => {
+          menu.classList.toggle("hidden");
+          icon.classList.toggle("bi-list");
+          icon.classList.toggle("bi-x");
+        });
+      });
+    </script>
+  </body>
+</html>
