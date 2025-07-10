@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerUserDetails implements UserDetails {
+public class CustomUserDetails implements UserDetails {
 
     private long id;
     private String username;

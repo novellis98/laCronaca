@@ -44,14 +44,14 @@ public class UserController {
             RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
         User existingUser = userService.findUserByEmail(userDto.getEmail());
         if (existingUser != null && existingUser.getEmail() != null && existingUser.getEmail().isEmpty()) {
-            result.rejectValue("email", null, "There is already an account registered with that email");
+            result.rejectValue("email", null, "Esiste già un utente con questa email");
         }
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
             return "auth/register";
         }
         userService.saveUser(userDto, redirectAttributes, request, response);
-        redirectAttributes.addFlashAttribute("successMessage", "You have successfully registered");
-        return "redirect:/register?success";
+        redirectAttributes.addFlashAttribute("successMessage", "Registrazione avvenuta con successo!");
+        return "redirect:/";
     }
 }

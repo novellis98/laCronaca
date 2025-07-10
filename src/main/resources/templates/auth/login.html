@@ -4,14 +4,14 @@
   <body>
     <head th:insert="~{index :: navbar}"></head>
     <main class="container mt-5">
-      <h1 class="text-center mb-4">Login</h1>
+      <h1 class="text-center mb-4">Accedi</h1>
 
       <!-- Messaggi di errore/successo -->
       <div th:if="${param.error}" class="alert alert-danger">
-        Invalid email or password
+        Email o password non validi
       </div>
       <div th:if="${param.logout}" class="alert alert-success">
-        You have been logged out.
+        Sei stato disconnesso con successo
       </div>
 
       <!-- Form di login -->
@@ -28,7 +28,7 @@
             class="form-control"
             id="email"
             name="email"
-            placeholder="Enter your email"
+            placeholder="Inserisci la tua email"
             required
           />
         </div>
@@ -39,13 +39,15 @@
             class="form-control"
             id="password"
             name="password"
-            placeholder="Enter your password"
+            placeholder="Inserisci la tua password"
             required
           />
         </div>
-        <button type="submit" class="btn btn-primary w-100 mb-2">Login</button>
+        <button type="submit" class="btn btn-primary w-100 mb-2">Accedi</button>
         <div class="text-center">
-          <a href="/register" class="text-decoration-none">Not registered?</a>
+          <a href="/register" class="text-decoration-none"
+            >Non ancora registrato?</a
+          >
         </div>
       </form>
     </main>

@@ -4,11 +4,11 @@
   <body>
     <head th:insert="~{index :: navbar}"></head>
     <main class="container mt-5">
-      <h1 class="text-center mb-4">Registration</h1>
+      <h1 class="text-center mb-4">Registrazione</h1>
 
-      <div class="alert alert-success" role="alert" th:if="${param.success}">
-        You have successfully registered
-      </div>
+      <!-- <div class="alert alert-success" role="alert" th:if="${param.success}">
+        Ti sei registrato con successo! Ora puoi accedere
+      </div> -->
 
       <form
         th:action="@{/register/save}"
@@ -19,13 +19,13 @@
       >
         <!-- First Name -->
         <div class="mb-3">
-          <label for="firstName" class="form-label">First Name</label>
+          <label for="firstName" class="form-label">Nome</label>
           <input
             type="text"
             id="firstName"
             name="firstName"
             th:field="*{firstName}"
-            placeholder="Enter your first name"
+            placeholder="Inserisci il tuo nome"
             class="form-control"
             required
           />
@@ -38,13 +38,13 @@
 
         <!-- Last Name -->
         <div class="mb-3">
-          <label for="lastName" class="form-label">Last Name</label>
+          <label for="lastName" class="form-label">Cognome</label>
           <input
             type="text"
             id="lastName"
             name="lastName"
             th:field="*{lastName}"
-            placeholder="Enter your last name"
+            placeholder="Inserisci il tuo cognome"
             class="form-control"
             required
           />
@@ -63,7 +63,7 @@
             id="email"
             name="email"
             th:field="*{email}"
-            placeholder="Enter your email"
+            placeholder="Inserisci la tua email"
             class="form-control"
             required
           />
@@ -82,7 +82,7 @@
             id="password"
             name="password"
             th:field="*{password}"
-            placeholder="Enter your password"
+            placeholder="inserisci la tua password"
             class="form-control"
             required
           />
@@ -99,7 +99,7 @@
         </button>
         <div class="text-center">
           <a th:href="@{/login}" class="text-decoration-none"
-            >Already registered?</a
+            >Hai un account?</a
           >
         </div>
       </form>
