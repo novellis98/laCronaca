@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head th:insert="~{index :: head}"></head>
+  <head th:replace="~{index :: head}"></head>
   <body>
-    <head th:insert="~{index :: navbar}"></head>
+    <nav th:replace="~{index :: navbar}"></nav>
     <main class="container mt-5">
       <h1 class="text-center mb-4">Accedi</h1>
 
@@ -24,10 +24,10 @@
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
           <input
-            type="email"
+            type="text"
             class="form-control"
-            id="email"
-            name="email"
+            id="username"
+            name="username"
             placeholder="Inserisci la tua email"
             required
           />
@@ -51,7 +51,8 @@
         </div>
       </form>
     </main>
-    <head th:insert="~{index :: footer}"></head>
-    <head th:insert="~{index :: script}"></head>
+    <footer th:replace="~{index :: footer}"></footer>
+    <div th:replace="~{index :: script}"></div>
+    <div th:replace="~{index :: customScript}"></div>
   </body>
 </html>

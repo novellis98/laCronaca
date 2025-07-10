@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head th:insert="~{index :: head}"></head>
+  <head th:replace="~{index :: head}"></head>
   <body>
-    <head th:insert="~{index :: navbar}"></head>
+    <nav th:replace="~{index :: navbar}"></nav>
     <main class="container mt-5">
       <h1 class="text-center mb-4">Registrazione</h1>
 
@@ -105,7 +105,8 @@
       </form>
     </main>
 
-    <head th:insert="~{index :: footer}"></head>
-    <head th:insert="~{index :: script}"></head>
+    <footer th:replace="~{index :: footer}"></footer>
+    <div th:replace="~{index :: script}"></div>
+    <script th:replace="~{index :: customScript}"></script>
   </body>
 </html>

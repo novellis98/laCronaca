@@ -68,7 +68,6 @@ public class UserServiceImpl implements UserService {
             CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getEmail());
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(), userDto.getPassword());
-
             Authentication authentication = authenticationManager.authenticate(authToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             HttpSession session = request.getSession(true);

@@ -47,7 +47,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public String getUsername() {
-        return username;
+        return email;
     }
 
     public String getEmail() {
@@ -60,6 +60,10 @@ public class CustomUserDetails implements UserDetails {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getFullname() {
+        return username;
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

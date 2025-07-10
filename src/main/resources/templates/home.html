@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head th:insert="~{index :: head}"></head>
+  <head th:replace="~{index :: head}"></head>
   <body>
-    <head th:insert="~{index :: navbar}"></head>
+    <nav th:replace="~{index :: navbar}"></nav>
+
     <!-- messaggi -->
     <div th:if="${param.notAuthorized}">Not authorized</div>
     <main>
@@ -19,6 +20,8 @@
       </div>
     </main>
 
-    <head th:insert="~{index :: footer}"></head>
+    <footer th:replace="~{index :: footer}"></footer>
+    <script th:replace="~{index :: script}"></script>
+    <script th:replace="~{index :: customScript}"></script>
   </body>
 </html>

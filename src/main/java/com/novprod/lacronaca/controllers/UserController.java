@@ -43,7 +43,7 @@ public class UserController {
     public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model,
             RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
         User existingUser = userService.findUserByEmail(userDto.getEmail());
-        if (existingUser != null && existingUser.getEmail() != null && existingUser.getEmail().isEmpty()) {
+        if (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()) {
             result.rejectValue("email", null, "Esiste già un utente con questa email");
         }
         if (result.hasErrors()) {

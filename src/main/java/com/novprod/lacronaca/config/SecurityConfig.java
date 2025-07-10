@@ -34,10 +34,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**", "/.well-known/**").permitAll()
                         .requestMatchers("/register/**", "/register", "/login", "/error/**").permitAll()
                         .anyRequest().authenticated())
-                .formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login").defaultSuccessUrl("/")
+                .formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/")
                         .permitAll())
                 .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll())
                 .exceptionHandling(exception -> exception.accessDeniedPage("/error/403"))
