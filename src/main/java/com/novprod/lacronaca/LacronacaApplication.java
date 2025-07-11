@@ -1,5 +1,6 @@
 package com.novprod.lacronaca;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -17,5 +18,11 @@ public class LacronacaApplication {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 
+	}
+
+	@Bean
+	public ModelMapper instanceModelMapper() {
+		ModelMapper mapper = new ModelMapper();
+		return mapper;
 	}
 }

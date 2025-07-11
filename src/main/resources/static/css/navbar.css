@@ -13,7 +13,7 @@
 .nav-link:focus,
 .nav-link:hover,
 .nav-link.active {
-  font-weight: 900;
+  color: rgb(169, 169, 123);
 }
 .dropdown-item {
   display: block;

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{index :: head}"></head>
+  <body>
+    <nav th:replace="~{index :: navbar}"></nav>
+
+    <main class="container mt-5">
+      <div class="p-4 rounded bg-custom-primary text-white shadow">
+        <h2 class="mb-4">Crea un nuovo articolo</h2>
+
+        <form
+          th:action="@{/articles}"
+          th:object="${article}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <!-- TITOLO -->
+          <div class="mb-3">
+            <label for="articleTitle" class="form-label">Titolo</label>
+            <input
+              type="text"
+              class="form-control"
+              id="articleTitle"
+              th:field="*{title}"
+              placeholder="Inserisci un articolo"
+            />
+            <p
+              th:if="${#fields.hasErrors('title')}"
+              th:errors="*{title}"
+              class="text-warning small"
+            ></p>
+          </div>
+
+          <!-- SOTTOTITOLO -->
+          <div class="mb-3">
+            <label for="subtitle" class="form-label">Sottotitolo</label>
+            <input
+              type="text"
+              class="form-control"
+              id="subtitle"
+              th:field="*{subtitle}"
+              placeholder="Inserisci un sottotitolo"
+            />
+            <p
+              th:if="${#fields.hasErrors('subtitle')}"
+              th:errors="*{subtitle}"
+              class="text-warning small"
+            ></p>
+          </div>
+
+          <!-- BODY -->
+          <div class="mb-3">
+            <label for="body" class="form-label">Articolo:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="body"
+              th:field="*{body}"
+              placeholder="Scrivi il contenuto"
+            ></input>
+            <p
+              th:if="${#fields.hasErrors('body')}"
+              th:errors="*{body}"
+              class="text-warning small"
+            ></p>
+          </div>
+
+          <!-- DATA PUBBLICAZIONE -->
+          <div class="mb-3">
+            <label for="date" class="form-label"
+              >Data pubblicazione</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              id="date"
+              th:field="*{publishDate}"
+            />
+            <p
+              th:if="${#fields.hasErrors('publishDate')}"
+              th:errors="*{publishDate}"
+              class="text-warning small"
+            ></p>
+          </div>
+
+          <!-- SELECT CATEGORIA -->
+          <div class="mb-3">
+            <label for="category" class="form-label">Categoria</label>
+            <select class="form-select" id="category" th:field="*{category}">
+              <option
+                th:each="category : ${categories}"
+                th:value="${category.id}"
+                th:text="${category.name}"
+              >
+                Categoria
+              </option>
+                <p
+              th:if="${#fields.hasErrors('category')}"
+              th:errors="*{category}"
+              class="text-warning small"
+            ></p>
+            </select>
+          </div>
+
+          <!-- IMMAGINE -->
+          <div class="mb-3">
+            <label for="image" class="form-label">Immagine</label>
+            <input
+              type="file"
+              name="file"
+              class="form-control"
+              id="image"
+          
+            />
+            <!-- <p
+              th:if="${#fields.hasErrors('image')}"
+              th:errors="*{image}"
+              class="text-warning small"
+            ></p> -->
+          </div>
+
+          <!-- BOTTONE -->
+          <button type="submit" class="btn btn-light">Crea articolo</button>
+        </form>
+      </div>
+    </main>
+
+    <footer th:replace="~{index :: footer}"></footer>
+    <div th:replace="~{index :: script}"></div>
+    <div th:replace="~{index :: customScript}"></div>
+  </body>
+</html>
