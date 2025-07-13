@@ -3,6 +3,7 @@ package com.novprod.lacronaca.dtos;
 import java.time.LocalDate;
 
 import com.novprod.lacronaca.models.Category;
+import com.novprod.lacronaca.models.Image;
 import com.novprod.lacronaca.models.User;
 
 import lombok.Data;
@@ -18,4 +19,5 @@ public class ArticleDto {
     private LocalDate publishDate;
     private User user;
     private Category category;
+    private Image image;
 }

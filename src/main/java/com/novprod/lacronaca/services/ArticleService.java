@@ -2,6 +2,7 @@ package com.novprod.lacronaca.services;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
     private ModelMapper modelMapper;
     @Autowired
     private ArticleRepository articleRepository;
+    @Autowired
+    private ImageService imageService;
 
     @Override
     public List<ArticleDto> readAll() {
@@ -40,13 +43,26 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
 
     @Override
     public ArticleDto create(Article article, Principal principal, MultipartFile file) {
+        String url = "";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             User user = (userRepository.findById(userDetails.getId())).get();
             article.setUser(user);
         }
+        if (!file.isEmpty()) {
+            try {
+                CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                url = futureUrl.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         ArticleDto dto = modelMapper.map(articleRepository.save(article), ArticleDto.class);
+        // if (!file.isEmpty() && url != null) {
+        if (!file.isEmpty()) {
+            imageService.saveImageOnDB(url, article);
+        }
         return dto;
     }
 
