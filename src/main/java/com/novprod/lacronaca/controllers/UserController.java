@@ -1,5 +1,10 @@
 package com.novprod.lacronaca.controllers;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +14,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.novprod.lacronaca.dtos.ArticleDto;
 import com.novprod.lacronaca.dtos.UserDto;
 import com.novprod.lacronaca.models.User;
+import com.novprod.lacronaca.services.ArticleService;
 import com.novprod.lacronaca.services.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +29,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ArticleService articleService;
 
     @GetMapping("/")
-    public String home() {
+    public String home(Model viewModel) {
+        List<ArticleDto> articles = articleService.readAll();
+        Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
+        List<ArticleDto> lastFourArticles = articles.stream().limit(4).collect(Collectors.toList());
+        viewModel.addAttribute("articles", lastFourArticles);
         return "home";
     }
 

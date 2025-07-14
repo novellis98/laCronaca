@@ -18,38 +18,46 @@ import com.novprod.lacronaca.services.CustomUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+        @Autowired
+        private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+                        throws Exception {
+                return authenticationConfiguration.getAuthenticationManager();
+        }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**", "/.well-known/**").permitAll()
-                        .requestMatchers("/register/**", "/register", "/login", "/error/**").permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/")
-                        .permitAll())
-                .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll())
-                .exceptionHandling(exception -> exception.accessDeniedPage("/error/403"))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .maximumSessions(1).expiredUrl("/login?session-expired=true"));
-        return http.build();
-    }
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http.csrf(csrf -> csrf.disable())
+                                .authorizeHttpRequests((authorize) -> authorize
+                                                .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**",
+                                                                "/.well-known/**")
+                                                .permitAll()
+                                                .requestMatchers("/register/**", "/register", "/login", "/",
+                                                                "/error/**", "/articles",
+                                                                "/articles/detail/**",
+                                                                "/images/**", "/categories/search/{id}", "/search/{id}")
+                                                .permitAll()
+                                                .anyRequest().authenticated())
+                                .formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login")
+                                                .defaultSuccessUrl("/")
+                                                .permitAll())
+                                .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                                                .permitAll())
+                                .exceptionHandling(exception -> exception.accessDeniedPage("/error/403"))
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                                                .maximumSessions(1).expiredUrl("/login?session-expired=true"));
+                return http.build();
+        }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
-    }
+        @Autowired
+        public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+                auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
+        }
 
 }
