@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{index :: head}"></head>
+  <body class="bg-light">
+    <!-- Navbar -->
+    <nav th:replace="~{index :: navbar}"></nav>
+
+    <!-- Messaggi di successo -->
+    <div
+      th:if="${successMessage}"
+      class="alert alert-success alert-dismissible fade show m-4"
+      role="alert"
+    >
+      <p class="mb-0" th:text="${successMessage}"></p>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+
+    <!-- Main -->
+    <main class="container py-4">
+      <div class="mb-4">
+        <h1 class="display-5 fw-bold text-primary text-center">
+          Dashboard Admin
+        </h1>
+        <h2 class="h4 text-secondary text-center mt-3" th:text="${title}">
+          Richieste ricevute
+        </h2>
+      </div>
+
+      <div class="card shadow-sm bg-custom-secondary">
+        <div class="card-body">
+          <table class="table table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Utente</th>
+                <th scope="col">Per il ruolo</th>
+                <th scope="col" class="text-center">#Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="request : ${requests}">
+                <td th:text="${request.id}"></td>
+                <td th:text="${request.user.username}"></td>
+                <td th:text="${request.role.name}"></td>
+                <td class="text-center">
+                  <a
+                    th:href="@{/operations/career/request/detail/{id}(id=${request.id})}"
+                    class="btn btn-outline-primary"
+                  >
+                    <i class="fa-solid fa-bars"></i> Dettagli
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{index :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script th:replace="~{index :: script}"></script>
+    <script th:replace="~{index :: customScript}"></script>
+  </body>
+</html>

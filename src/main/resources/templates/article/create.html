@@ -5,9 +5,11 @@
     <nav th:replace="~{index :: navbar}"></nav>
 
     <main class="container mt-5">
-      <div class="p-4 rounded bg-custom-primary text-white shadow">
-        <h2 class="mb-4">Crea un nuovo articolo</h2>
-
+      <div> 
+        <h2 class="mb-4 text-center">Crea un nuovo articolo</h2>
+      </div>
+          
+      <div class="p-4 rounded bg-custom-secondary shadow">
         <form
           th:action="@{/articles}"
           th:object="${article}"
@@ -120,7 +122,7 @@
           </div>
 
           <!-- BOTTONE -->
-          <button type="submit" class="btn btn-light">Crea articolo</button>
+          <button type="submit" class="btn btn-success">Crea articolo</button>
         </form>
       </div>
     </main>

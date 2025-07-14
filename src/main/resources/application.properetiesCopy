@@ -12,3 +12,11 @@ supabase.url=https://your-supabase-url.supabase.co
 supabase.key=your-supabase-key
 supabase.bucket=your-supabase-bucket
 supabase.image=dsfdsfsdf
+#mail
+spring.mail.host=<valore di MAIL_HOST>
+spring.mail.port=<valore di MAIL_PORT>
+spring.mail.username=<valore di MAIL_USERNAME>
+spring.mail.password=<valore di MAIL_PASSWORD>
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true

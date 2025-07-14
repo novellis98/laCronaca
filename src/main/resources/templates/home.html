@@ -6,12 +6,13 @@
 
     <!-- messaggi -->
     <div th:if="${param.notAuthorized}">Not authorized</div>
-
+    <div th:if="${successMessage}" class="alert alert-success">
+      <p th:text="${successMessage}"></p>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-warning">
+      <p th:text="${errorMessage}"></p>
+    </div>
     <main>
-      <div class="alert alert-success" role="alert" th:if="${successMessage}">
-        <p th:text="${successMessage}"></p>
-      </div>
-
       <div class="mx-auto px-4">
         <h1 class="text-3xl font-bold text-center mt-10">
           Benvenuto su La Cronaca

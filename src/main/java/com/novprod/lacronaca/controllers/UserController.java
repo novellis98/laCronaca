@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.novprod.lacronaca.Repositories.CareerRequestRepository;
 import com.novprod.lacronaca.dtos.ArticleDto;
 import com.novprod.lacronaca.dtos.UserDto;
 import com.novprod.lacronaca.models.User;
 import com.novprod.lacronaca.services.ArticleService;
+import com.novprod.lacronaca.services.CategoryService;
 import com.novprod.lacronaca.services.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +33,10 @@ public class UserController {
     private UserService userService;
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private CareerRequestRepository careerRequestRepository;
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping("/")
     public String home(Model viewModel) {
@@ -66,5 +72,13 @@ public class UserController {
         userService.saveUser(userDto, redirectAttributes, request, response);
         redirectAttributes.addFlashAttribute("successMessage", "Registrazione avvenuta con successo!");
         return "redirect:/";
+    }
+
+    @GetMapping("/admin/dashboard")
+    public String adminDashboard(Model viewModel) {
+        viewModel.addAttribute("title", "Richieste ricevute");
+        viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
+        viewModel.addAttribute("categories", categoryService.readAll());
+        return "admin/dashboard";
     }
 }

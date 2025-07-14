@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{index :: head}"></head>
+  <body>
+    <nav th:replace="~{index :: navbar}"></nav>
+    <main class="container py-5">
+      <div class="row justify-content-center mb-4">
+        <div class="col-md-8 text-center">
+          <h1 class="mb-4" th:text="${title}">Richiesta collaborazione</h1>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <form
+            th:action="@{/operations/career/request/save}"
+            method="POST"
+            th:object="${careerRequest}"
+            enctype="multipart/form-data"
+            class="card p-4 shadow-sm bg-custom-secondary"
+          >
+            <div class="mb-3">
+              <label for="body" class="form-label fw-bold"
+                >Motivo della richiesta:</label
+              >
+              <textarea
+                th:field="*{body}"
+                id="body"
+                class="form-control"
+                placeholder="Inserisci motivazione..."
+                rows="5"
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="role" class="form-label fw-bold"
+                >Per quale ruolo?</label
+              >
+              <select th:field="*{role}" id="role" class="form-select">
+                <option
+                  th:each="role : ${roles}"
+                  th:value="${role.id}"
+                  th:text="${#strings.substring(role.name, 5)}"
+                ></option>
+              </select>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success fw-semibold">
+                Effettua richiesta
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <footer th:replace="~{index :: footer}"></footer>
+    <script th:replace="~{index :: script}"></script>
+    <script th:replace="~{index :: customScript}"></script>
+  </body>
+</html>
