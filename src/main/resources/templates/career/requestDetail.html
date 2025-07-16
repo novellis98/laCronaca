@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{index :: head}"></head>
+  <body>
+    <nav th:replace="~{index :: navbar}"></nav>
+    <main class="container py-5">
+      <div class="row justify-content-center mb-4">
+        <div class="col-md-8 text-center">
+          <h1 class="mb-4">Richiesta</h1>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card p-4 shadow-sm bg-custom-secondary">
+            <h2 th:text="${request.user.username}">Nome Utente</h2>
+
+            <p th:text="${request.body}">Body</p>
+
+            <form
+              th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
+              method="POST"
+              class="mt-4"
+            >
+              <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <button type="submit" class="btn btn-success fw-semibold">
+                  Accetta richiesta
+                </button>
+                <a
+                  th:href="@{/admin/dashboard}"
+                  class="btn btn-secondary fw-semibold"
+                >
+                  Torna indietro
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer th:replace="~{index :: footer}"></footer>
+    <script th:replace="~{index :: script}"></script>
+    <script th:replace="~{index :: customScript}"></script>
+  </body>
+</html>

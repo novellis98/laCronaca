@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{index :: head}"></head>
+  <body class="bg-light">
+    <!-- Navbar -->
+    <nav th:replace="~{index :: navbar}"></nav>
+
+    <!-- Messaggi di successo -->
+    <div
+      th:if="${resultMessage}"
+      class="alert alert-success alert-dismissible fade show m-4"
+      role="alert"
+    >
+      <p class="mb-0" th:text="${resultMessage}"></p>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+
+    <!-- Main -->
+    <main class="container py-4">
+      <div class="mb-4">
+        <h1 class="display-5 fw-bold text-primary text-center">
+          Dashboard Revisor
+        </h1>
+        <h2 class="h4 text-secondary text-center mt-3" th:text="${title}">
+          Articoli da revisionare
+        </h2>
+      </div>
+
+      <div class="card shadow-sm bg-custom-secondary">
+        <div class="card-body">
+          <table class="table table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Titolo</th>
+                <th scope="col">Sottotitolo</th>
+                <th scope="col">Categoria</th>
+                <th scope="col" class="text-center">#Azioni</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="article : ${articles}">
+                <td th:text="${article.id}"></td>
+                <td th:text="${article.title}"></td>
+                <td th:text="${article.subtitle}"></td>
+                <td
+                  th:if="${article.category}"
+                  th:text="${article.category.name}"
+                ></td>
+                <td th:unless="${article.category}">Nessuna categoria</td>
+                <td class="text-center">
+                  <a
+                    th:href="@{/articles/revisor/detail/{id}(id=${article.id})}"
+                    class="btn btn-outline-primary"
+                  >
+                    <i class="bi bi-info-lg"></i> Leggi
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{index :: footer}"></footer>
+
+    <!-- Scripts -->
+    <script th:replace="~{index :: script}"></script>
+    <script th:replace="~{index :: customScript}"></script>
+  </body>
+</html>

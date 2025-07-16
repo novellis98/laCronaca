@@ -5,7 +5,9 @@
     <nav th:replace="~{index :: navbar}"></nav>
 
     <!-- messaggi -->
-    <div th:if="${param.notAuthorized}">Not authorized</div>
+    <div th:if="${param.notAuthorized}">
+      <div class="alert alert-danger">Non autorizzato</div>
+    </div>
     <div th:if="${successMessage}" class="alert alert-success">
       <p th:text="${successMessage}"></p>
     </div>

@@ -93,7 +93,13 @@
             </p>
             <p class="mb-0">
               Autore:
-              <a href="">
+              <!-- <a class="text-muted" href="#">
+                <span th:text="${article.user.username}">User</span>
+              </a> -->
+              <a
+                class="text-muted"
+                th:href="@{/search/{id}(id=${article.user.id})}"
+              >
                 <span th:text="${article.user.username}">User</span>
               </a>
             </p>

@@ -1,22 +1,27 @@
 package com.novprod.lacronaca.controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.novprod.lacronaca.Repositories.ArticleRepository;
 import com.novprod.lacronaca.Repositories.CareerRequestRepository;
 import com.novprod.lacronaca.dtos.ArticleDto;
 import com.novprod.lacronaca.dtos.UserDto;
+import com.novprod.lacronaca.models.Article;
 import com.novprod.lacronaca.models.User;
 import com.novprod.lacronaca.services.ArticleService;
 import com.novprod.lacronaca.services.CategoryService;
@@ -37,10 +42,17 @@ public class UserController {
     private CareerRequestRepository careerRequestRepository;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ArticleRepository articleRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping("/")
     public String home(Model viewModel) {
-        List<ArticleDto> articles = articleService.readAll();
+        List<ArticleDto> articles = new ArrayList<ArticleDto>();
+        for (Article article : articleRepository.findByIsAcceptedTrue()) {
+            articles.add(modelMapper.map(article, ArticleDto.class));
+        }
         Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
         List<ArticleDto> lastFourArticles = articles.stream().limit(4).collect(Collectors.toList());
         viewModel.addAttribute("articles", lastFourArticles);
@@ -80,5 +92,23 @@ public class UserController {
         viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
         viewModel.addAttribute("categories", categoryService.readAll());
         return "admin/dashboard";
+    }
+
+    @GetMapping("/revisor/dashboard")
+    public String revisorDashboard(Model viewModel) {
+        viewModel.addAttribute("title", "Articoli da revisionare");
+        viewModel.addAttribute("articles", articleRepository.findByIsAcceptedNull());
+        return "revisor/dashboard";
+    }
+
+    @GetMapping("/search/{id}")
+    public String userArticlesSearch(@PathVariable("id") Long id, Model viewModel) {
+        User user = userService.find(id);
+        viewModel.addAttribute("title", "Tutti gli articoli trovati per l'utente " + user.getUsername());
+        List<ArticleDto> articles = articleService.searchByAuthor(user);
+        List<ArticleDto> acceptedArticles = articles.stream()
+                .filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+        viewModel.addAttribute("articles", acceptedArticles);
+        return "article/articles";
     }
 }

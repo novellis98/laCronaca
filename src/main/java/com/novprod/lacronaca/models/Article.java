@@ -18,10 +18,12 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// @ToString(exclude = { "user", "category", "image" })
 @Entity
 @Table(name = "articles")
 public class Article {
@@ -46,6 +48,9 @@ public class Article {
 
     @Column(nullable = false, length = 8)
     private LocalDate publishDate;
+
+    @Column(nullable = true)
+    private Boolean isAccepted;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
