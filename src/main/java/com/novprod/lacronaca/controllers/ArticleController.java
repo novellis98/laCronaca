@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -86,6 +88,37 @@ public class ArticleController {
         return "article/detail";
     }
 
+    @GetMapping("/edit/{id}")
+    public String editArticle(@PathVariable("id") Long id, Model viewModel) {
+        viewModel.addAttribute("title", "Modifica articolo");
+        viewModel.addAttribute("article", articleService.read(id));
+        viewModel.addAttribute("categories", categoryService.readAll());
+        return "article/edit";
+    }
+
+    @PostMapping("/update/{id}")
+    public String articleUpdate(@PathVariable("id") Long id, @Valid @ModelAttribute("article") Article article,
+            BindingResult result, RedirectAttributes redirectAttributes, Principal principal, MultipartFile file,
+            Model viewModel) {
+        if (result.hasErrors()) {
+            viewModel.addAttribute("title", "Modifica articolo");
+            article.setImage(articleService.read(id).getImage());
+            viewModel.addAttribute("article", article);
+            viewModel.addAttribute("categories", categoryService.readAll());
+            return "article/edit";
+        }
+        articleService.update(id, article, principal, file);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo modificato con successo");
+        return "redirect:/articles";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        articleService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo cancellato con successo");
+        return "redirect:/writer/dashboard";
+    }
+
     @GetMapping("revisor/detail/{id}")
     public String revisorDetailArticle(@PathVariable("id") Long id, Model viewModel) {
         viewModel.addAttribute("title", "Dettagli articolo");
@@ -107,6 +140,16 @@ public class ArticleController {
         }
 
         return "redirect:/revisor/dashboard";
+    }
+
+    @GetMapping("/search")
+    public String articleSearch(@Param("keyword") String keyword, Model viewModel) {
+        viewModel.addAttribute("title", "Tutti gli articoli trovati");
+        List<ArticleDto> articles = articleService.search(keyword);
+        List<ArticleDto> acceptedArticles = articles.stream()
+                .filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+        viewModel.addAttribute("articles", acceptedArticles);
+        return "article/articles";
     }
 
 }

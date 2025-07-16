@@ -5,13 +5,13 @@
     <nav th:replace="~{index :: navbar}"></nav>
 
     <main class="container mt-5">
-      <div> 
-        <h2 class="mb-4 text-center">Crea un nuovo articolo</h2>
+      <div>
+        <h2 class="mb-4 text-center">Modifica articolo</h2>
       </div>
-          
+
       <div class="p-4 rounded bg-custom-secondary shadow">
         <form
-          th:action="@{/articles}"
+          th:action="@{/articles/update/{id}(id=${article.id})}"
           th:object="${article}"
           method="POST"
           enctype="multipart/form-data"
@@ -23,7 +23,7 @@
               class="form-control"
               id="articleTitle"
               th:field="*{title}"
-              placeholder="Inserisci un articolo"
+              placeholder="Modifica il titolo"
             />
             <p
               th:if="${#fields.hasErrors('title')}"
@@ -38,7 +38,7 @@
               class="form-control"
               id="subtitle"
               th:field="*{subtitle}"
-              placeholder="Inserisci un sottotitolo"
+              placeholder="Modifica il sottotitolo"
             />
             <p
               th:if="${#fields.hasErrors('subtitle')}"
@@ -50,11 +50,10 @@
           <div class="mb-3">
             <label for="body" class="form-label">Articolo:</label>
             <input
-              type="text"
               class="form-control"
               id="body"
               th:field="*{body}"
-              placeholder="Scrivi il contenuto"
+              placeholder="Modifica il contenuto"
             ></input>
             <p
               th:if="${#fields.hasErrors('body')}"
@@ -64,9 +63,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="date" class="form-label"
-              >Data pubblicazione</label
-            >
+            <label for="date" class="form-label">Data pubblicazione</label>
             <input
               type="date"
               class="form-control"
@@ -90,38 +87,40 @@
               >
                 Categoria
               </option>
-                <p
+            </select>
+            <p
               th:if="${#fields.hasErrors('category')}"
               th:errors="*{category}"
               class="text-warning small"
             ></p>
-            </select>
+          </div>
+          <div class="mb-3 d-flex flex-column" th:if="${article.image != null}">
+            <label for="image" class="form-label">Immagine dell'articolo</label>
+            <img
+              id="image"
+              th:src="${article.image.path}"
+              alt="${article.image.path}"
+            />
+          </div>
+          <div th:unless="${article.image != null}">
+            <label for="image" class="form-label">Immagine dell'articolo</label>
+            <p>Immagine non presente</p>
           </div>
 
           <div class="mb-3">
-            <label for="image" class="form-label">Immagine</label>
-            <input
-              type="file"
-              name="file"
-              class="form-control"
-              id="image"
-          
-            />
-            <!-- <p
-              th:if="${#fields.hasErrors('image')}"
-              th:errors="*{image}"
-              class="text-warning small"
-            ></p> -->
+            <label for="image" class="form-label">Image</label>
+            <input type="file" name="file" class="form-control" id="image">
           </div>
 
-          <!-- BOTTONE -->
-          <button type="submit" class="btn btn-success">Crea articolo</button>
+          <button type="submit" class="btn btn-primary">
+            Aggiorna articolo
+          </button>
         </form>
       </div>
     </main>
 
     <footer th:replace="~{index :: footer}"></footer>
-    <div th:replace="~{index :: script}"></div>
-    <div th:replace="~{index :: customScript}"></div>
+    <script th:replace="~{index :: script}"></script>
+    <script th:replace="~{index :: customScript}"></script>
   </body>
 </html>

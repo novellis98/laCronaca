@@ -44,10 +44,15 @@ public class SecurityConfig {
                                                 .requestMatchers("/revisor/dashboard", "/revisor/detail/{id}",
                                                                 "/accept")
                                                 .hasRole("REVISOR")
+                                                .requestMatchers("/writer/dashboard", "/articles/create",
+                                                                "/articles/edit/{id}",
+                                                                "/articles/update/{id}", "/articles/delete/{id}")
+                                                .hasRole("WRITER")
                                                 .requestMatchers("/register/**", "/register", "/login", "/",
                                                                 "/error/**", "/articles",
                                                                 "/articles/detail/**",
-                                                                "/images/**", "/categories/search/{id}", "/search/{id}")
+                                                                "/images/**", "/categories/search/{id}", "/search/{id}",
+                                                                "/articles/search")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login")

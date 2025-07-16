@@ -1,5 +1,6 @@
 package com.novprod.lacronaca.controllers;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -110,5 +111,15 @@ public class UserController {
                 .filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
         viewModel.addAttribute("articles", acceptedArticles);
         return "article/articles";
+    }
+
+    @GetMapping("/writer/dashboard")
+    public String writerDashboard(Model viewModel, Principal principal) {
+        viewModel.addAttribute("title", "I tuoi articoli");
+
+        List<ArticleDto> userArticles = articleService.readAll().stream()
+                .filter(article -> article.getUser().getEmail().equals(principal.getName())).toList();
+        viewModel.addAttribute("articles", userArticles);
+        return "/writer/dashboard";
     }
 }

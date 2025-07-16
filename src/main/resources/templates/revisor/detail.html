@@ -22,7 +22,7 @@
                 <div class="carousel-item active">
                   <img
                     th:if="${article.image != null}"
-                    th:src="@{article.image.path}"
+                    th:src="${article.image.path}"
                     class="card-img-top"
                     alt="..."
                   />

@@ -49,7 +49,10 @@
             <li class="nav-item">
               <a class="nav-link" th:href="@{/}">Home</a>
             </li>
-            <li class="nav-item" sec:authorize="isAuthenticated">
+            <li
+              class="nav-item"
+              sec:authorize="isAuthenticated && hasRole('ROLE_WRITER')"
+            >
               <a class="nav-link" th:href="@{/articles/create}"
                 >Crea articolo</a
               >
@@ -85,11 +88,10 @@
                 </div>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{/carrello}">Carrello</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{/profilo}">Profilo</a>
+            <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
+              <a class="nav-link" th:href="@{/writer/dashboard}"
+                >Dashboard Writer</a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" th:href="@{/operations/career/request}"
@@ -136,6 +138,21 @@
               </span>
             </span>
           </div>
+          <form class="d-flex" th:action="@{/articles/search}" method="GET">
+            <input
+              type="search"
+              class="form-control me-2"
+              placeholder="cerca"
+              name="keyword"
+              aria-label="Search"
+            />
+            <button
+              class="btn btn-outline-success text-white border-white"
+              type="submit"
+            >
+              Cerca
+            </button>
+          </form>
         </div>
       </div>
     </nav>

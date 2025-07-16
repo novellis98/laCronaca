@@ -80,15 +80,79 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
     }
 
     @Override
-    public ArticleDto update(Long key, Article model, Principal principal, MultipartFile file) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public ArticleDto update(Long key, Article updatedArticle, Principal principal, MultipartFile file) {
+        String url = "";
+        // Controlla se l'articolo esiste
+        if (articleRepository.existsById(key)) {
+            // Assegna l'ID dell'articolo originale
+            updatedArticle.setId(key);
+            // Recupera l'articolo originale
+            Article article = articleRepository.findById(key).get();
+            // Imposta l'utente dell'articolo originale
+            updatedArticle.setUser(article.getUser());
+
+            // Controllo se è stato caricato un nuovo file
+            if (!file.isEmpty()) {
+                try {
+                    // Elimina l'immagine precedente
+                    imageService.deleteImage(article.getImage().getPath());
+
+                    try {
+                        // Salva la nuova immagine
+                        CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                        url = futureUrl.get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    // Salva il nuovo path nel database
+                    imageService.saveImageOnDB(url, updatedArticle);
+
+                    // L'articolo modificato torna in revisione
+                    updatedArticle.setIsAccepted(null);
+
+                    return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (article.getImage() == null) {
+                // L'articolo originale non ha immagine e non è stata caricata
+                updatedArticle.setIsAccepted(article.getIsAccepted());
+            } else {
+                // L'immagine non è modificata, mantieni quella originale
+                updatedArticle.setImage(article.getImage());
+
+                // Controlla se l'articolo è cambiato
+                if (updatedArticle.equals(article) == false) {
+                    updatedArticle.setIsAccepted(null);
+                } else {
+                    updatedArticle.setIsAccepted(article.getIsAccepted());
+                }
+                return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+            }
+
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        return null;
     }
 
     @Override
     public void delete(Long key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        if (articleRepository.existsById(key)) {
+            Article article = articleRepository.findById(key).get();
+
+            try {
+                String path = article.getImage().getPath();
+                article.getImage().setArticle(null);
+                imageService.deleteImage(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            articleRepository.deleteById(key);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public List<ArticleDto> searchByCategory(Category category) {
@@ -111,6 +175,14 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
         Article article = articleRepository.findById(id).get();
         article.setIsAccepted(result);
         articleRepository.save(article);
+    }
+
+    public List<ArticleDto> search(String keyword) {
+        List<ArticleDto> dtos = new ArrayList<ArticleDto>();
+        for (Article article : articleRepository.search(keyword)) {
+            dtos.add(modelMapper.map(article, ArticleDto.class));
+        }
+        return dtos;
     }
 
 }

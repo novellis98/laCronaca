@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-// @ToString(exclude = { "roles" })
+@ToString(exclude = { "roles" })
 @Table(name = "users")
 public class User {
     @Id

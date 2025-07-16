@@ -20,7 +20,7 @@
                 th:if="${article.image != null}"
               >
                 <img
-                  th:src="@{${article.image.path}}"
+                  th:src="${article.image.path}"
                   class="d-block w-100"
                   alt="Immagine articolo"
                   style="height: 400px; object-fit: cover"
