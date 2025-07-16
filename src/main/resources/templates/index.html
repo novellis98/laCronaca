@@ -23,7 +23,7 @@
     <!-- INIZIO NAVBAR -->
     <nav
       th:fragment="navbar"
-      class="navbar navbar-expand-lg bg-custom-primary navbar-dark"
+      class="navbar navbar-expand-xl bg-custom-primary navbar-dark"
     >
       <div class="container-fluid">
         <!-- LOGO -->
@@ -46,9 +46,6 @@
         <!-- CONTENUTO COLLASSABILE -->
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{/}">Home</a>
-            </li>
             <li
               class="nav-item"
               sec:authorize="isAuthenticated && hasRole('ROLE_WRITER')"
@@ -123,16 +120,15 @@
               </ul>
             </li>
           </ul>
-
           <!-- UTENTE AUTENTICATO -->
           <div
             sec:authorize="isAuthenticated()"
-            class="d-flex align-items-center"
+            class="d-flex align-items-center me-3"
           >
             <span class="text-white ms-3">
               <i class="bi bi-person-circle me-1"></i>
               <span
-                th:text="'Benvenuto: ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.authorities[0].authority.replace('ROLE_', '')}"
+                th:text="'Benvenuto: ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.getAuthorities()[1].authority.replace('ROLE_', '')}"
               >
                 Benvenuto
               </span>
