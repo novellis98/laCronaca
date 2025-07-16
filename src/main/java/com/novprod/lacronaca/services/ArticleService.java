@@ -79,62 +79,133 @@ public class ArticleService implements CrudService<ArticleDto, Article, Long> {
         return dto;
     }
 
+    // @Override
+    // public ArticleDto update(Long key, Article updatedArticle, Principal
+    // principal, MultipartFile file) {
+    // String url = "";
+    // // Controlla se l'articolo esiste
+    // if (articleRepository.existsById(key)) {
+    // // Assegna l'ID dell'articolo originale
+    // updatedArticle.setId(key);
+    // // Recupera l'articolo originale
+    // Article article = articleRepository.findById(key).get();
+    // // Imposta l'utente dell'articolo originale
+    // updatedArticle.setUser(article.getUser());
+
+    // // Controllo se è stato caricato un nuovo file
+    // if (!file.isEmpty()) {
+    // try {
+    // // Elimina l'immagine precedente
+    // imageService.deleteImage(article.getImage().getPath());
+
+    // try {
+    // // Salva la nuova immagine
+    // CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+    // url = futureUrl.get();
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+
+    // // Salva il nuovo path nel database
+    // imageService.saveImageOnDB(url, updatedArticle);
+
+    // // L'articolo modificato torna in revisione
+    // updatedArticle.setIsAccepted(null);
+
+    // return modelMapper.map(articleRepository.save(updatedArticle),
+    // ArticleDto.class);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // }
+    // } else if (article.getImage() == null) {
+    // // L'articolo originale non ha immagine e non è stata caricata
+    // updatedArticle.setIsAccepted(article.getIsAccepted());
+    // } else {
+    // // L'immagine non è modificata, mantieni quella originale
+    // updatedArticle.setImage(article.getImage());
+
+    // // Controlla se l'articolo è cambiato
+    // if (updatedArticle.equals(article) == false) {
+    // updatedArticle.setIsAccepted(null);
+    // } else {
+    // updatedArticle.setIsAccepted(article.getIsAccepted());
+    // }
+    // return modelMapper.map(articleRepository.save(updatedArticle),
+    // ArticleDto.class);
+    // }
+
+    // } else {
+    // throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    // }
+    // return null;
+    // }
     @Override
     public ArticleDto update(Long key, Article updatedArticle, Principal principal, MultipartFile file) {
         String url = "";
+
         // Controlla se l'articolo esiste
-        if (articleRepository.existsById(key)) {
-            // Assegna l'ID dell'articolo originale
-            updatedArticle.setId(key);
-            // Recupera l'articolo originale
-            Article article = articleRepository.findById(key).get();
-            // Imposta l'utente dell'articolo originale
-            updatedArticle.setUser(article.getUser());
+        if (!articleRepository.existsById(key)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Articolo non trovato");
+        }
 
-            // Controllo se è stato caricato un nuovo file
-            if (!file.isEmpty()) {
-                try {
-                    // Elimina l'immagine precedente
-                    imageService.deleteImage(article.getImage().getPath());
+        // Assegna l'ID dell'articolo originale
+        updatedArticle.setId(key);
 
-                    try {
-                        // Salva la nuova immagine
-                        CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
-                        url = futureUrl.get();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        // Recupera l'articolo originale
+        Article originalArticle = articleRepository.findById(key).get();
 
-                    // Salva il nuovo path nel database
-                    imageService.saveImageOnDB(url, updatedArticle);
+        // Imposta l'utente dell'articolo originale
+        updatedArticle.setUser(originalArticle.getUser());
 
-                    // L'articolo modificato torna in revisione
-                    updatedArticle.setIsAccepted(null);
-
-                    return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        // Controllo se è stato caricato un nuovo file
+        if (!file.isEmpty()) {
+            try {
+                // Elimina l'immagine precedente se esiste
+                if (originalArticle.getImage() != null) {
+                    imageService.deleteImage(originalArticle.getImage().getPath());
                 }
-            } else if (article.getImage() == null) {
-                // L'articolo originale non ha immagine e non è stata caricata
-                updatedArticle.setIsAccepted(article.getIsAccepted());
-            } else {
-                // L'immagine non è modificata, mantieni quella originale
-                updatedArticle.setImage(article.getImage());
 
-                // Controlla se l'articolo è cambiato
-                if (updatedArticle.equals(article) == false) {
-                    updatedArticle.setIsAccepted(null);
-                } else {
-                    updatedArticle.setIsAccepted(article.getIsAccepted());
-                }
-                return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+                // Salva la nuova immagine
+                CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                url = futureUrl.get();
+
+                // Salva il nuovo path nel database
+                imageService.saveImageOnDB(url, updatedArticle);
+
+                // L'articolo modificato torna in revisione
+                updatedArticle.setIsAccepted(null);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Errore durante il caricamento dell'immagine");
+            }
+        } else {
+            // Nessun nuovo file caricato
+            if (originalArticle.getImage() != null) {
+                // Mantieni l'immagine originale
+                updatedArticle.setImage(originalArticle.getImage());
             }
 
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            // Controlla se l'articolo è cambiato (confronto senza immagine)
+            if (isArticleContentChanged(originalArticle, updatedArticle)) {
+                updatedArticle.setIsAccepted(null); // Torna in revisione
+            } else {
+                updatedArticle.setIsAccepted(originalArticle.getIsAccepted()); // Mantieni stato originale
+            }
         }
-        return null;
+
+        // Salva sempre l'articolo aggiornato
+        Article savedArticle = articleRepository.save(updatedArticle);
+        return modelMapper.map(savedArticle, ArticleDto.class);
+    }
+
+    // Metodo helper per confrontare il contenuto dell'articolo
+    private boolean isArticleContentChanged(Article original, Article updated) {
+        return !original.getTitle().equals(updated.getTitle()) ||
+                !original.getSubtitle().equals(updated.getSubtitle()) ||
+                !original.getBody().equals(updated.getBody()) ||
+                original.getCategory().getId() != updated.getCategory().getId();
     }
 
     @Override

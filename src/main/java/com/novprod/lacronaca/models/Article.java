@@ -65,20 +65,48 @@ public class Article {
     @JsonIgnoreProperties({ "article" })
     private Image image;
 
+    // @Override
+    // public boolean equals(Object obj) {
+
+    // Article article = (Article) obj;
+
+    // if (title.equals(article.getTitle()) &&
+    // subtitle.equals(article.getSubtitle()) &&
+    // body.equals(article.getBody()) &&
+    // publishDate.equals(article.getPublishDate()) &&
+    // category.getName().equals(article.getCategory().getName()) &&
+    // image.getPath().equals(article.getImage().getPath())) {
+    // return true;
+    // }
+
+    // return false;
+    // }
     @Override
     public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
 
         Article article = (Article) obj;
 
-        if (title.equals(article.getTitle()) &&
-                subtitle.equals(article.getSubtitle()) &&
-                body.equals(article.getBody()) &&
-                publishDate.equals(article.getPublishDate()) &&
-                category.getName().equals(article.getCategory().getName()) &&
-                image.getPath().equals(article.getImage().getPath())) {
-            return true;
+        // Confronta i campi principali
+        if (!title.equals(article.getTitle()) ||
+                !subtitle.equals(article.getSubtitle()) ||
+                !body.equals(article.getBody()) ||
+                !publishDate.equals(article.getPublishDate()) ||
+                !category.getName().equals(article.getCategory().getName())) {
+            return false;
         }
 
-        return false;
+        // Confronta le immagini gestendo i casi null
+        if (image == null && article.getImage() == null) {
+            return true;
+        }
+        if (image == null || article.getImage() == null) {
+            return false;
+        }
+
+        return image.getPath().equals(article.getImage().getPath());
     }
 }
