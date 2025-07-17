@@ -1,4 +1,4 @@
-INSERT INTO users(username, email, password, created_at) values ('admin', 'admin@novprod.it', 'gwsurg2u62372ibxq', '20250507');
+INSERT INTO users(username, email, password, created_at) values ('admin', 'admin@novprod.it', '$2a$10$oMiUOq5ToRfUI/Zprg5nE.qt8nT9KKJZoDBu1SIWuj.UGx8aRHwxS', '20250507');
 
 INSERT INTO roles(name) values ('ROLE_ADMIN');
 INSERT INTO roles(name) values ('ROLE_REVISOR');

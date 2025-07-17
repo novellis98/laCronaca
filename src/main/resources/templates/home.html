@@ -43,12 +43,14 @@
                 th:src="@{${article.image.path}}"
                 class="card-img-top"
                 alt="immsgine articolo"
+                style="height: 200px"
               />
               <img
                 th:unless="${article.image != null}"
                 th:src="@{/images/default.jpeg}"
                 class="card-img-top"
                 alt="immsgine articolo"
+                style="height: 200px"
               />
 
               <div class="card-body">

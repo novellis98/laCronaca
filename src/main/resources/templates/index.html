@@ -127,8 +127,18 @@
           >
             <span class="text-white ms-3">
               <i class="bi bi-person-circle me-1"></i>
-              <span
+              <!-- <span
+                th:text="'Benvenuto: ' + ${#authentication.principal.fullname}"
+              >
+                Benvenuto
+              </span> -->
+              <!-- <span
                 th:text="'Benvenuto: ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.getAuthorities()[1].authority.replace('ROLE_', '')}"
+              >
+                Benvenuto
+              </span> -->
+              <span
+                th:text="'Benvenuto: ' + ${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.getAuthorities()[0].authority.replace('ROLE_', '')}"
               >
                 Benvenuto
               </span>
